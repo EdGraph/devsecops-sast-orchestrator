@@ -1,3 +1,99 @@
+# DevSecOps Orchestration, SAST Audit, and Self-Healing Framework
+
+## 🎯 About the Project
+This tools ecosystem was developed as part of my Graduation Thesis (TCC) at **PUCPR**. The primary objective is to analyze the impact of Large Language Models (LLMs) in mitigating security vulnerabilities within legacy code (PHP), evaluating the effectiveness, compliance, and data lineage across different levels of prompt engineering specificity.
+
+### 💡 Motivation & Platform Engineering Approach
+The original academic scope did not require automation. However, aiming for operational efficiency and the feasibility of scaling tests across **multiple simultaneous projects**, the architecture was independently conceived to function as an end-to-end automated data engineering framework. The solution autonomously covers the entire lifecycle of infrastructure provisioning, AI-driven refactoring, Static Application Security Testing (SAST), and governance.
+
+## 🏗️ System Architecture & Modules
+The framework is composed of 6 fully integrated Python modules with native support for idempotency:
+
+### 1. Environment Provisioning Module (`01_environment_provisioner.py`)
+Focuses on *Infrastructure as Code* (IaC) and *Disaster Recovery*.
+- Automates the creation and replication of complex hierarchical directory architectures within Google Drive Cloud.
+- Implements built-in defensive logic that checks node existence before execution to prevent volume duplication or logical tree corruption.
+
+### 2. Security Baseline Module (`02_security_baseline.py`)
+Establishes the initial risk state (*Security Baseline Testing*).
+- Isolates the original legacy source code located in the root folder (`src`), executing isolated cloud-based scans.
+- Persists an incremental CSV report (`resultados_baseline.csv`) containing raw original metrics (Bugs, Vulnerabilities, and Hotspots) to enable comparative statistics on mitigation effectiveness.
+
+### 3. Ingestion & Intelligent Refactoring Pipeline (`03_llm_refactoring_pipeline.py`)
+Orchestrates code downloads from GitHub and manages secure, dynamic consumption of the **Google Gemini API**.
+- Applies three progressive levels of prompt engineering specificity focused on mitigating vulnerabilities within the CIA triad (OWASP).
+- Implements intelligent model routing (*FinOps*) based on the complexity of the requested business rule.
+
+### 4. SAST Audit & Mining Engine (`04_sast_audit_engine.py`)
+Automates and isolates Static Application Security Testing (SAST) execution on AI-generated code.
+- Sanitizes command-line interface (CLI) parameters using regular expressions (**Regex**) to mitigate command injection risks.
+- Consumes **SonarCloud REST API** endpoints to extract quality metrics and mine specific Common Weakness Enumeration identifiers (**CWE**), exporting structured CSV reports.
+
+### 5. Data Lineage & Traceability Module (`05_prompt_lineage_documenter.py`)
+Ensures IT governance and audit compliance.
+- Maps original repository source URLs from GitHub to guarantee software lifecycle traceability (*GitHub Source Lineage*).
+- Automatically generates metadata files containing the structured history of prompts utilized for each critical function.
+
+### 6. Evidence Cloud Synchronizer (`06_evidence_drive_synchronizer.py`)
+Manages visual reports and dashboard print traffic between the local workspace and the cloud.
+- Implements a *Tree Walking* algorithm optimized with in-memory caching via Python dictionaries to reduce API request overhead (*Memoization*).
+- Leverages `resumable` uploads to guarantee data streaming resilience against network connection drops.
+
+## 🛡️ Engineering & Resilience Highlights
+To ensure data pipeline autonomy during large-scale executions, the system implements rigorous exception handling and fault-tolerance patterns:
+*   **Defensive External API Handling:** Manual implementation of control mechanisms and request throttling.
+*   **Drop-off Logic (Adapted Circuit Breaker):** The framework monitors the stability of Gemini API responses. If a specific prompt fails consecutively for 5 attempts, the system triggers a drop-off logic (`counter += 1`), skips to the next instruction without breaking the execution flow, and compiles a failure report at runtime termination for manual auditing.
+
+## 🛠️ Tech Stack & Concepts
+- **Core Language:** Python 3
+- **Cloud APIs:** Google GenAI SDK (Gemini Pro), Google Drive API v3, SonarCloud REST API
+- **Security & Quality:** SonarCloud (SAST), OWASP Guidelines, CWE Catalog
+- **Engineering Concepts:** Infrastructure as Code (IaC), Disaster Recovery, Idempotency, Progressive Backoff, Caching (Memoization), and FinOps.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+Before running the pipeline, ensure you have **Python 3.10+** installed along with the required cloud credentials:
+1. A Google Cloud Project with the **Google Drive API v3** enabled. Download your OAuth2 credentials file and save it as `credentials.json` in the root folder.
+2. A **SonarCloud Token** and your **Organization Key** generated from your SonarCloud account.
+3. A **Google Gemini API Key** configured in your environment variables or credentials manager.
+
+### Installation
+Clone the repository and install the dependencies:
+```bash
+git clone https://github.com
+cd devsecops-sast-orchestrator
+pip install -r requirements.txt
+```
+
+*Note: Ensure your `requirements.txt` contains: `google-genai`, `google-auth-oauthlib`, `google-api-python-client`, and `requests`.*
+
+### Execution Order
+Run the modules sequentially to complete the data engineering and DevSecOps pipeline:
+
+```bash
+# 1. Provision the Google Drive cloud directory structure
+python 01_environment_provisioner.py
+
+# 2. Establish the security baseline metrics for the legacy code
+python 02_security_baseline.py
+
+# 3. Execute the AI refactoring pipeline using Gemini Pro
+python 03_llm_refactoring_pipeline.py
+
+# 4. Trigger SAST auditing and extract data mining reports (CSV/CWEs)
+python 04_sast_audit_engine.py
+
+# 5. Document prompt engineering metadata and source data lineage
+python 05_prompt_lineage_documenter.py
+
+# 6. Synchronize local evidence and dashboard captures back to Cloud Storage
+python 06_evidence_drive_synchronizer.py
+```
+
+
 # Framework de Orquestração, Auditoria SAST e Auto-recuperação DevSecOps
 
 ## 🎯 Sobre o Projeto
@@ -50,3 +146,5 @@ Para garantir a autonomia do pipeline de dados em execuções de larga escala, o
 - **APIs Cloud:** Google GenAI SDK (Gemini Pro), Google Drive API v3, SonarCloud REST API
 - **Segurança e Qualidade:** SonarCloud (SAST), Diretrizes OWASP, Catálogo CWE
 - **Conceitos de Engenharia:** Infrastructure as Code (IaC), Disaster Recovery, Idempotência, Backoff Progressivo, Caching e FinOps.
+
+
