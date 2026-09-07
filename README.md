@@ -147,4 +147,47 @@ Para garantir a autonomia do pipeline de dados em execuções de larga escala, o
 - **Segurança e Qualidade:** SonarCloud (SAST), Diretrizes OWASP, Catálogo CWE
 - **Conceitos de Engenharia:** Infrastructure as Code (IaC), Disaster Recovery, Idempotência, Backoff Progressivo, Caching e FinOps.
 
+---
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+Antes de rodar o pipeline, certifique-se de ter o **Python 3.10+** instalado em sua máquina, além das seguintes credenciais configuradas:
+1. Um projeto no Google Cloud com a **Google Drive API v3** ativada. Baixe o arquivo de credenciais OAuth2 e salve-o como `credentials.json` na pasta raiz do projeto.
+2. Um **Token do SonarCloud** e a **Chave da Organização** gerados em sua conta do SonarCloud.
+3. Uma **Chave de API do Google Gemini** configurada nas suas variáveis de ambiente ou gerenciador de credenciais.
+
+### Instalação
+Clone o repositório e instale as dependências necessárias:
+```bash
+git clone https://github.com
+cd devsecops-sast-orchestrator
+pip install -r requirements.txt
+```
+
+*Nota: Certifique-se de que seu arquivo `requirements.txt` inclua os pacotes: `google-genai`, `google-auth-oauthlib`, `google-api-python-client` e `requests`.*
+
+### Ordem de Execução
+Execute os módulos sequencialmente para rodar a esteira completa de engenharia de dados e DevSecOps:
+
+```bash
+# 1. Provisiona a estrutura hierárquica de pastas no Google Drive Cloud
+python 01_environment_provisioner.py
+
+# 2. Estabelece as métricas da linha de base de segurança usando o código legado original
+python 02_security_baseline.py
+
+# 3. Executa o pipeline de refatoração com IA consumindo a API do Gemini Pro
+python 03_llm_refactoring_pipeline.py
+
+# 4. Dispara a auditoria automatizada de segurança (SAST) e extrai os relatórios (CSV/CWEs)
+python 04_sast_audit_engine.py
+
+# 5. Documenta os metadados da engenharia de prompts e a linhagem de dados de origem
+python 05_prompt_lineage_documenter.py
+
+# 6. Sincroniza as evidências locais e capturas do dashboard de volta para o Google Drive
+python 06_evidence_drive_synchronizer.py
+```
+
 
