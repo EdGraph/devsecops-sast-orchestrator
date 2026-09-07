@@ -1,0 +1,10 @@
+# Google GenAI SDK (Modern library for Gemini Pro orchestration)
+google-genai
+
+# Google API Client & OAuth (For cloud directory provisioning and storage syncing)
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+
+# HTTP & REST API Client (For mining cloud metrics from SonarCloud endpoints)
+requests
