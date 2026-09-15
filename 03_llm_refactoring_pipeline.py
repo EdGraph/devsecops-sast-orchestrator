@@ -130,7 +130,7 @@ for funcao in pastas_funcoes:
             modelo_escolhido = 'gemini-3.1-pro-preview'
             tempo_de_pausa = 3
         else:
-            modelo_escolhido = 'gemini-3.1-pro-preview'
+            modelo_escolhido = 'gemini-3.1-flash-lite'
             tempo_de_pausa = 3
         
         for tentativa in range(1, 4):
