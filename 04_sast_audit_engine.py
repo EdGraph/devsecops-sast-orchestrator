@@ -18,6 +18,7 @@ SONAR_ORG = "secret"
 
 SCOPES = ['https://googleapis.com']
 ID_PASTA_DRIVE = "secret"
+PROJETO = "Projeto_1"
 
 PASTAS_FUNCOES = [
     "FuncaoCritica_1(Confidencialidade)", 
@@ -74,7 +75,7 @@ def executar_analise(id_arquivo, nome_arquivo, funcao, nivel, tentativa, writer)
             status, done = downloader.next_chunk()
             
     # Lógica Defensiva/Segurança: Higienização de parâmetros de CLI via Regex (Prevenção de Command Injection)
-    project_key_raw = f"Proj1_{funcao.split('(')[0]}_{nivel}_{tentativa}"
+    project_key_raw = f"{PROJETO}_{funcao.split('(')[0]}_{nivel}_{tentativa}"
     project_key = re.sub(r'[^a-zA-Z0-9\-_.]', '_', project_key_raw)
     
     comando_scanner = [
@@ -173,7 +174,7 @@ def executar_analise(id_arquivo, nome_arquivo, funcao, nivel, tentativa, writer)
 # --- PIPELINE PRINCIPAL DE ORQUESTRAÇÃO SAST ---
 print("=== Iniciando Pipeline de Análise Estática (SAST) no SonarCloud ===")
 
-id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_DRIVE, "Projeto_1")
+id_projeto = buscar_subpasta_por_nome(ID_PASTA_DRIVE, PROJETO)
 
 arquivo_csv = 'resultados_pesquisa_sast.csv'
 with open(arquivo_csv, mode='w', newline='', encoding='utf-8') as csv_file:
@@ -187,7 +188,7 @@ with open(arquivo_csv, mode='w', newline='', encoding='utf-8') as csv_file:
     ])
 
     for funcao in PASTAS_FUNCOES:
-        id_funcao = buscar_subpasta_por_nome(id_projeto_1, funcao)
+        id_funcao = buscar_subpasta_por_nome(id_projeto, funcao)
         if not id_funcao: continue
         print(f"\n[OK] Entrou na pasta '{funcao}'")
         

@@ -4,6 +4,7 @@ from googleapiclient.discovery import build
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 ID_PASTA_DRIVE = "secret"
+PROJETO = "Projeto_1"
 
 # Definição dos parâmetros estruturais da árvore lógica do projeto
 PASTAS_FUNCOES = [
@@ -48,7 +49,7 @@ def criar_pasta(nome, parent_id):
 # --- INICIALIZAÇÃO DA ORQUESTRACÃO IAC ---
 print("=== Reconstruindo Estrutura de Pastas ===")
 
-id_projeto = criar_pasta("Projeto_1", ID_PASTA_DRIVE)
+id_projeto = criar_pasta(PROJETO, ID_PASTA_DRIVE)
 
 for funcao in PASTAS_FUNCOES:
     print(f"\nMontando hierarquia para: {funcao}")

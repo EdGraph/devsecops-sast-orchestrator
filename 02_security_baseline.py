@@ -19,6 +19,8 @@ SONAR_ORG = "secret"
 
 SCOPES = ['https://googleapis.com']
 ID_PASTA_DRIVE = "secret"
+PROJETO = "Projeto_1"
+
 
 PASTAS_FUNCOES = [
     "FuncaoCritica_1(Confidencialidade)", 
@@ -73,7 +75,7 @@ def executar_analise_src(id_arquivo, nome_arquivo, funcao):
             _, done = downloader.next_chunk()
             
     # Lógica Defensiva/Segurança: Higienização de parâmetros de CLI via Regex (Prevenção de Command Injection)
-    project_key_raw = f"baseline_src3_{funcao.split('(')}"
+    project_key_raw = f"baseline_src_{funcao.split('(')}"
     project_key = re.sub(r'[^a-zA-Z0-9\-_.]', '_', project_key_raw)
     
     comando_scanner = [
@@ -145,13 +147,13 @@ def executar_analise_src(id_arquivo, nome_arquivo, funcao):
 # --- PIPELINE PRINCIPAL DE ORQUESTRAÇÃO DE BASELINE ---
 print("=== Teste de Baseline (Apenas pasta SRC) no SonarCloud ===")
 
-id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_DRIVE, "Projeto_1")
-if not id_projeto_1:
-    print("Erro: Pasta 'Projeto_1' não encontrada na Web.")
+id_projeto = buscar_subpasta_por_nome(ID_PASTA_DRIVE, PROJETO)
+if not id_projeto:
+    print(f"Erro: Pasta {PROJETO} não encontrada na Web.")
     exit()
 
 for funcao in PASTAS_FUNCOES:
-    id_funcao = buscar_subpasta_por_nome(id_projeto_1, funcao)
+    id_funcao = buscar_subpasta_por_nome(id_projeto, funcao)
     if not id_funcao: continue
     
     id_src = buscar_subpasta_por_nome(id_funcao, "src")

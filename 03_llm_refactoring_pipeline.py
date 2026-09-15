@@ -24,6 +24,7 @@ service = obter_servico_drive()
 client_gemini = genai.Client(api_key="secret")
 
 ID_PASTA_DRIVE = "secret"
+PROJETO = "Projeto_1"
 counter = 0
 
 # --- PROMPTS DE ENGENHARIA DE SEGURANÇA (OWASP / CID) ---
@@ -90,15 +91,15 @@ def upload_arquivo_drive(parent_id, nome_arquivo, conteudo, max_tentativas=5):
 # --- PIPELINE PRINCIPAL DE PROCESSAMENTO ---
 print("=== Iniciando Conexão com o Google Drive da Web ===")
 
-id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_DRIVE, "Projeto_1")
-if not id_projeto_1:
-    print("Erro: Pasta 'Projeto_1' não encontrada na Web.")
+id_projeto = buscar_subpasta_por_nome(ID_PASTA_DRIVE, PROJETO)
+if not id_projeto:
+    print(f"Erro: Pasta {PROJETO} não encontrada na Web.")
     exit()
 
 pastas_funcoes = ["FuncaoCritica_1(Confidencialidade)", "FuncaoCritica_2(Integridade)", "FuncaoCritica_3(Disponiblidade)"]
 
 for funcao in pastas_funcoes:
-    id_funcao = buscar_subpasta_por_nome(id_projeto_1, funcao)
+    id_funcao = buscar_subpasta_por_nome(id_projeto, funcao)
     if not id_funcao: continue
     
     id_src = buscar_subpasta_por_nome(id_funcao, "src")
@@ -130,7 +131,7 @@ for funcao in pastas_funcoes:
             modelo_escolhido = 'gemini-3.1-pro-preview'
             tempo_de_pausa = 3
         else:
-            modelo_escolhido = 'gemini-3.1-pro-preview'
+            modelo_escolhido = 'gemini-3.1-flash-lite'
             tempo_de_pausa = 3
         
         for tentativa in range(1, 4):
@@ -179,4 +180,4 @@ for funcao in pastas_funcoes:
             time.sleep(tempo_de_pausa)
 
 print(f"\n Quantidade de desistencias: {counter}")
-print("\n=== Processamento Web do Projeto 1 Concluído com Gemini! ===")
+print(f"\n=== Processamento Web do {PROJETO} Concluído com Gemini! ===")
