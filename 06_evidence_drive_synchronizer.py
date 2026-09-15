@@ -5,8 +5,8 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 SCOPES = ['https://googleapis.com']
-ID_PASTA_EDUARDO = "secret"
-NOME_PASTA_RAIZ = "Projeto_5"
+ID_PASTA_DRIVE = "secret"
+NOME_PASTA_RAIZ = "Projeto_1"
 
 def obter_servico_drive():
     """Realiza o fluxo de autenticação OAuth2 e inicializa o cliente do Google Drive."""
@@ -44,7 +44,7 @@ def fazer_upload(caminho_arquivo, id_pasta_destino):
 # --- ORQUESTRACÃO DO PIPELINE DE SINCRONIZAÇÃO (TREE WALKING) ---
 print(f"=== Iniciando Sincronização Local -> Drive para '{NOME_PASTA_RAIZ}' ===")
 
-id_raiz_drive = buscar_subpasta_por_nome(ID_PASTA_EDUARDO, NOME_PASTA_RAIZ)
+id_raiz_drive = buscar_subpasta_por_nome(ID_PASTA_DRIVE, NOME_PASTA_RAIZ)
 if not id_raiz_drive:
     print(f"[-] Erro: Nó raiz '{NOME_PASTA_RAIZ}' não localizado no repositório de destino.")
     exit()

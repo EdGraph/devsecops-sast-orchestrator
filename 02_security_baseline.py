@@ -18,7 +18,7 @@ SONAR_TOKEN = "secret"
 SONAR_ORG = "secret"
 
 SCOPES = ['https://googleapis.com']
-ID_PASTA_EDUARDO = "secret"
+ID_PASTA_DRIVE = "secret"
 
 PASTAS_FUNCOES = [
     "FuncaoCritica_1(Confidencialidade)", 
@@ -145,9 +145,9 @@ def executar_analise_src(id_arquivo, nome_arquivo, funcao):
 # --- PIPELINE PRINCIPAL DE ORQUESTRAÇÃO DE BASELINE ---
 print("=== Teste de Baseline (Apenas pasta SRC) no SonarCloud ===")
 
-id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_EDUARDO, "Projeto_2")
+id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_DRIVE, "Projeto_1")
 if not id_projeto_1:
-    print("Erro: Pasta 'Projeto_2' não encontrada na Web.")
+    print("Erro: Pasta 'Projeto_1' não encontrada na Web.")
     exit()
 
 for funcao in PASTAS_FUNCOES:

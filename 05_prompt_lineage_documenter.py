@@ -10,7 +10,7 @@ if os.path.exists('token.json'):
     os.remove('token.json')
 
 SCOPES = ['https://googleapis.com']
-ID_PASTA_EDUARDO = "secret"
+ID_PASTA_DRIVE = "secret"
 
 # --- PROMPTS DE ENGENHARIA DE SEGURANÇA (OWASP / CID) ---
 prompt_baixa = "Refatore o seguinte código PHP para melhorar seu desempenho e legibilidade. Retorne apenas o código PHP limpo, sem explicações textuais ou markdown:\n\n"
@@ -62,9 +62,9 @@ def upload_txt_drive(parent_id, nome_arquivo, conteudo):
 # --- PIPELINE PRINCIPAL DE GOVERNANÇA E AUDITORIA ---
 print("=== Iniciando Conexão com o Google Drive ===")
 
-id_projeto_4 = buscar_subpasta_por_nome(ID_PASTA_EDUARDO, "Projeto_5")
-if not id_projeto_4:
-    print("Erro: Pasta 'Projeto_5' não encontrada na Web.")
+id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_DRIVE, "Projeto_1")
+if not id_projeto_1:
+    print("Erro: Pasta 'Projeto_1' não encontrada na Web.")
     exit()
 
 pastas_funcoes = ["FuncaoCritica_1(Confidencialidade)", "FuncaoCritica_2(Integridade)", "FuncaoCritica_3(Disponiblidade)"]
@@ -72,7 +72,7 @@ pastas_funcoes = ["FuncaoCritica_1(Confidencialidade)", "FuncaoCritica_2(Integri
 print("\n=== Iniciando a criação dos arquivos txt de documentação ===")
 
 for funcao in pastas_funcoes:
-    id_funcao = buscar_subpasta_por_nome(id_projeto_4, funcao)
+    id_funcao = buscar_subpasta_por_nome(id_projeto_1, funcao)
     if not id_funcao: 
         print(f"Erro: Pasta '{funcao}' não encontrada.")
         continue

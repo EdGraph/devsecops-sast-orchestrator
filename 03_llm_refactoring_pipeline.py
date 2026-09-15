@@ -23,7 +23,7 @@ def obter_servico_drive():
 service = obter_servico_drive()
 client_gemini = genai.Client(api_key="secret")
 
-ID_PASTA_EDUARDO = "secret"
+ID_PASTA_DRIVE = "secret"
 counter = 0
 
 # --- PROMPTS DE ENGENHARIA DE SEGURANÇA (OWASP / CID) ---
@@ -90,15 +90,15 @@ def upload_arquivo_drive(parent_id, nome_arquivo, conteudo, max_tentativas=5):
 # --- PIPELINE PRINCIPAL DE PROCESSAMENTO ---
 print("=== Iniciando Conexão com o Google Drive da Web ===")
 
-id_projeto_2 = buscar_subpasta_por_nome(ID_PASTA_EDUARDO, "Projeto_4")
-if not id_projeto_2:
-    print("Erro: Pasta 'Projeto_4' não encontrada na Web.")
+id_projeto_1 = buscar_subpasta_por_nome(ID_PASTA_DRIVE, "Projeto_1")
+if not id_projeto_1:
+    print("Erro: Pasta 'Projeto_1' não encontrada na Web.")
     exit()
 
 pastas_funcoes = ["FuncaoCritica_1(Confidencialidade)", "FuncaoCritica_2(Integridade)", "FuncaoCritica_3(Disponiblidade)"]
 
 for funcao in pastas_funcoes:
-    id_funcao = buscar_subpasta_por_nome(id_projeto_2, funcao)
+    id_funcao = buscar_subpasta_por_nome(id_projeto_1, funcao)
     if not id_funcao: continue
     
     id_src = buscar_subpasta_por_nome(id_funcao, "src")
@@ -130,7 +130,7 @@ for funcao in pastas_funcoes:
             modelo_escolhido = 'gemini-3.1-pro-preview'
             tempo_de_pausa = 3
         else:
-            modelo_escolhido = 'gemini-3.1-flash-lite'
+            modelo_escolhido = 'gemini-3.1-pro-preview'
             tempo_de_pausa = 3
         
         for tentativa in range(1, 4):
@@ -152,6 +152,7 @@ for funcao in pastas_funcoes:
             # Lógica defensiva contra oscilações e Rate Limiting da API LLM
             while not sucesso_na_api and tentativas_api < 5:
                 try:
+                    # ATENÇÃO: Use a variável aqui em vez do nome fixo
                     resposta = client_gemini.models.generate_content(
                         model=modelo_escolhido, 
                         contents=f"{prompt_texto}{codigo_original}"
@@ -160,3 +161,22 @@ for funcao in pastas_funcoes:
                     sucesso_na_api = True
                 except Exception as e:
                     tentativas_api += 1
+                    print(f"     [!] Erro na API (Tentativa {tentativas_api}/5) -> Detalhe: {e}")
+                    if tentativas_api < 5:
+                        # Se for erro 503 (Servidor Lotado), espera mais tempo (20s) pra tentar de novo
+                        espera = 20 
+                        print(f"     [!] Servidor ocupado. Aguardando {espera} segundos...")
+                        time.sleep(espera)
+                    else:
+                        counter += 1
+                        print("     [!] Desistindo desta tentativa específica após 5 erros...")
+            
+            if sucesso_na_api:
+                upload_arquivo_drive(id_tentativa, nome_arquivo, codigo_refatorado)
+                
+            # ATENÇÃO: Pausa dinâmica
+            print(f"  -> Pausa de {tempo_de_pausa}s para respeitar limites do {modelo_escolhido}...")
+            time.sleep(tempo_de_pausa)
+
+print(f"\n Quantidade de desistencias: {counter}")
+print("\n=== Processamento Web do Projeto 1 Concluído com Gemini! ===")
